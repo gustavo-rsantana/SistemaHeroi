@@ -31,18 +31,20 @@ namespace SistemaHeroi.Models
             {
                 var ataqueTotal = Ataque + (Nivel * 2);
                 Console.WriteLine($"O herói está atacando com {ataqueTotal} de dano!");
-            } 
-            
-            Console.WriteLine("Voce esta morto!");
+            }
+            else
+            {
+                Console.WriteLine("O herói está morto e não pode atacar!");
+            }
+
         }
 
         public void ReceberDano(int dano)
         {
-            var danoTotal = dano - Defesa;
+            var danoTotal = dano >= this.Defesa? dano - this.Defesa : 5;
             if ( danoTotal >= this.Vida ) {
-                this.Vida = 0;
+                this.Morrer();
                 Console.WriteLine("O herói Morrel!");
-                this.EstaVivo = false;
             } else
             {
                 Console.WriteLine($"O herói recebeu {danoTotal} de dano!");
@@ -61,8 +63,7 @@ namespace SistemaHeroi.Models
                 }
                 else
                 {
-                    Random random = new();
-                    int cura = random.Next(10, 31);
+                    int cura = Random.Shared.Next(10, 31);
                     if ((this.Vida + cura) >= this.VidaMaxima)
                     {
                         Console.WriteLine("Você Curou toda a Vida!");
@@ -102,13 +103,19 @@ namespace SistemaHeroi.Models
             
         }
 
+        private void Morrer()
+        {
+            this.Vida = 0;
+            this.EstaVivo = false;
+        }
+
         public void ExibirStatus()
         {
             Console.WriteLine($"Nome: {Nome}");
             Console.WriteLine($"Classe: {Classe}");
             Console.WriteLine($"Nível: {Nivel}");
-            Console.WriteLine($"Vida: {VidaMaxima}/{Vida}");
-            Console.WriteLine($"Mana: {ManaMaxima}/{Mana}");
+            Console.WriteLine($"Vida: {Vida}/{VidaMaxima}");
+            Console.WriteLine($"Mana: {Mana}/{ManaMaxima}");
             Console.WriteLine($"Ataque: {Ataque}");
             Console.WriteLine($"Defesa: {Defesa}");
             Console.WriteLine($"Está Vivo: {EstaVivo}");
