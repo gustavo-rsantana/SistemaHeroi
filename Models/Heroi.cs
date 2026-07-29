@@ -6,62 +6,112 @@ namespace SistemaHeroi.Models
 {
     internal class Heroi
     {
-        public string nome { get; set; }
-        public string classe { get; set; }
-        public int nivel { get; set; } = 1;
-        public int vida { get; set; } = 100;
-        public int mana { get; set; } = 100;
-        public int ataque { get; set; } = 10;
-        public int defesa { get; set; } = 5;
+        public string Nome { get; set; }
+        public string Classe { get; set; }
+        public int Nivel { get; set; } = 1;
+        public int VidaMaxima { get; set; } = 100;
+        public int Vida { get; set; } = 100;
+        public int ManaMaxima { get; set; } = 50;
+        public int Mana { get; set; } = 50;
+        public int Ataque { get; set; } = 10;
+        public int Defesa { get; set; } = 5;
+        public bool EstaVivo { get; set; } = true;
 
         public Heroi(string nome, string classe)
         {
-            this.nome = nome;
-            this.classe = classe;
+            this.Nome = nome;
+            this.Classe = classe;
         }
 
 
 
         public void Atacar()
         {
-            var ataqueTotal = ataque + (nivel * 2);
-            Console.WriteLine($"O herói está atacando com {ataqueTotal} de dano!");
+            if (this.EstaVivo)
+            {
+                var ataqueTotal = Ataque + (Nivel * 2);
+                Console.WriteLine($"O herói está atacando com {ataqueTotal} de dano!");
+            } 
+            
+            Console.WriteLine("Voce esta morto!");
         }
 
-        public void ReceberDano()
+        public void ReceberDano(int dano)
         {
-            var danoTotal = 10 - defesa;
-            if ( danoTotal > this.vida ) {
-                danoTotal = this.vida - 1;
-                Console.WriteLine("O herói está prestes a morrer!");
+            var danoTotal = dano - Defesa;
+            if ( danoTotal >= this.Vida ) {
+                this.Vida = 0;
+                Console.WriteLine("O herói Morrel!");
+                this.EstaVivo = false;
+            } else
+            {
+                Console.WriteLine($"O herói recebeu {danoTotal} de dano!");
+                this.Vida -= danoTotal;
             }
-            Console.WriteLine($"O herói recebeu {danoTotal} de dano!");
-            this.vida -= danoTotal;
+            
         }
 
         public void Curar()
         {
-            Console.WriteLine("O herói está se curando!");
+            if (this.EstaVivo)
+            {
+                if (this.Mana <= 10)
+                {
+                    Console.WriteLine("Mana insuficiente para curar!");
+                }
+                else
+                {
+                    Random random = new();
+                    int cura = random.Next(10, 31);
+                    if ((this.Vida + cura) >= this.VidaMaxima)
+                    {
+                        Console.WriteLine("Você Curou toda a Vida!");
+                        this.Vida = this.VidaMaxima;
+                        this.Mana -= 10;
+                    }
+                    else
+                    {
+                        this.Vida += cura;
+                        this.Mana -= 10;
+                        Console.WriteLine($"O herói se curou em {cura} pontos de vida!");
+
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("O herói está morto e não pode se curar!");
+            }
         }
         public void SubirNivel()
         {
-            Console.WriteLine("O herói está subindo de nível!");
-            this.nivel++;
-            this.vida += 20;
-            this.mana += 10;
-            this.ataque++;
-            this.defesa++;
+            if (this.EstaVivo)
+            {
+                this.Nivel++;
+                this.VidaMaxima += 20;
+                this.ManaMaxima += 10;
+                this.Ataque++;
+                this.Defesa++;
+                this.Vida = this.VidaMaxima;
+                this.Mana = this.ManaMaxima;
+                Console.WriteLine("O herói alcaçõu o nível {0}!", this.Nivel);
+            } else
+            {
+                Console.WriteLine("O herói está morto e não pode subir de nível!");
+            }
+            
         }
 
         public void ExibirStatus()
         {
-            Console.WriteLine($"Nome: {nome}");
-            Console.WriteLine($"Classe: {classe}");
-            Console.WriteLine($"Nível: {nivel}");
-            Console.WriteLine($"Vida: {vida}");
-            Console.WriteLine($"Mana: {mana}");
-            Console.WriteLine($"Ataque: {ataque}");
-            Console.WriteLine($"Defesa: {defesa}");
+            Console.WriteLine($"Nome: {Nome}");
+            Console.WriteLine($"Classe: {Classe}");
+            Console.WriteLine($"Nível: {Nivel}");
+            Console.WriteLine($"Vida: {VidaMaxima}/{Vida}");
+            Console.WriteLine($"Mana: {ManaMaxima}/{Mana}");
+            Console.WriteLine($"Ataque: {Ataque}");
+            Console.WriteLine($"Defesa: {Defesa}");
+            Console.WriteLine($"Está Vivo: {EstaVivo}");
         }
     }
 }

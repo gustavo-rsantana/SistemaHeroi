@@ -29,7 +29,7 @@ while (!sair)
             heroi.Atacar();
             break;
         case "2":
-            heroi.ReceberDano();
+            heroi.ReceberDano(30);
             break;
         case "3":
             heroi.Curar();
